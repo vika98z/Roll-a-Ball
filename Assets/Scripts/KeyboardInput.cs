@@ -6,8 +6,8 @@ public class KeyboardInput : IInput
 
     public KeyboardInput(int playerNum)
     {
-        _hMove = $"Horizontal + {playerNum}";
-        _vMove = $"Vertical + {playerNum}";
+        _hMove = "Horizontal" + playerNum.ToString();
+        _vMove = "Vertical" + playerNum.ToString();
     }
 
     public float HorizontalMove => Input.GetAxis(_hMove);
