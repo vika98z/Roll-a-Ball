@@ -15,9 +15,20 @@ public class PlayerController : MonoBehaviour
     private Vector3 _movement;
     private IInput _input;
 
+    //
+    public Vector3 _position1;
+    private Vector3 _position2;
+    private Vector3 _position3;
+    //
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        //
+        _position1 = new Vector3(-34, 1, -15);
+        _position2 = new Vector3(-34, 1, 15);
+        _position3 = new Vector3(34, 1, -15);
+        //
     }
 
     private void Start()
@@ -61,5 +72,34 @@ public class PlayerController : MonoBehaviour
         _rb.AddForce(_movement * 10f);
     }
 
-    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag.Equals("hole"))
+        {
+            Destroy(this.gameObject);
+            GameObject _player = Resources.Load<GameObject>("Player") as GameObject;
+            //
+            GameObject _player1;
+            GameObject _player2;
+            GameObject _player3;
+            //
+            switch (_playerNum)
+            {
+                case 0:
+                    _player1 = Instantiate(_player, _position1, Quaternion.identity) as GameObject;
+                    _player1.name = "Player 1";
+                    break;
+                case 1:
+                    _player2 = Instantiate(_player, _position2, Quaternion.identity) as GameObject;
+                    _player2.name = "Player 2";
+                    break;
+                case 2:
+                    _player3 = Instantiate(_player, _position3, Quaternion.identity) as GameObject;
+                    _player3.name = "Player 3";
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour
     private GameObject _player2;
     private GameObject _player3;
 
-    private Vector3 _position1;
+    public Vector3 _position1;
     private Vector3 _position2;
     private Vector3 _position3;
 
