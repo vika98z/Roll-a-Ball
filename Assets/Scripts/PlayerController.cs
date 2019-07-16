@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -16,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private IInput _input;
 
     //
+    //[HideInInspector]
     public Vector3 _position1;
     private Vector3 _position2;
     private Vector3 _position3;
@@ -23,19 +25,40 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        //Debug.Log(nameof(Awake));
         _rb = GetComponent<Rigidbody>();
         //
         _position1 = new Vector3(-34, 1, -15);
         _position2 = new Vector3(-34, 1, 15);
         _position3 = new Vector3(34, 1, -15);
         //
+
+        MyCorute();
     }
 
     private void Start()
     {
+        //Debug.Log(nameof(Start));
+        //gameObject.activeSelf == true
+        //gameObject.activeInHierarchy == true
+
         SetInputVariable();
         SetColor();
+
+        MyCorute();
     }
+
+    private IEnumerator MyCorute()
+    {
+        Debug.Log(0);
+        yield return null;
+
+        Debug.Log(1);
+        yield return null;
+
+        Debug.Log("finish");
+    }
+
 
     private void SetInputVariable()
     {
