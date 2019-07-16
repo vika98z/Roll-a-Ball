@@ -1,35 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public int CountOfPlayers;
+
+    private GameObject _gamePlayer;
+    private GameObject _playerResource;
     private GameObject _player;
 
-    private GameObject _player1;
-    private GameObject _player2;
-    private GameObject _player3;
-
-    public Vector3 _position1;
-    private Vector3 _position2;
-    private Vector3 _position3;
+    private Vector3 _position;
+    private Vector3[] corners = { new Vector3(-34, 1, -15), new Vector3(-34, 1, 15), new Vector3(34, 1, -15), new Vector3(34, 1, 15) };
 
     private void Awake()
     {
-        _position1 = new Vector3(-34, 1, -15);
-        _position2 = new Vector3(-34, 1, 15);
-        _position3 = new Vector3(34, 1, -15);
-        Spawn();
+        for (int i = 0; i < CountOfPlayers; i++)
+        {
+            var _color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            Spawn(i, _color);
+        }
     }
 
-    void Spawn()
+    private void SetPosition(int i)
     {
-        _player = Resources.Load<GameObject>("Player") as GameObject;
-        _player1 = Instantiate(_player, _position1, Quaternion.identity) as GameObject;
-        _player1.name = "Player 1";
-        _player2 = Instantiate(_player, _position2, Quaternion.identity) as GameObject;
-        _player2.name = "Player 2";
-        _player3 = Instantiate(_player, _position3, Quaternion.identity) as GameObject;
-        _player3.name = "Player 3";
+        _position = corners[i];
+    }
+
+    public void Spawn(int playerNum, Color color)
+    {
+        _playerResource = Resources.Load<GameObject>("Player") as GameObject;
+        SetPosition(playerNum);
+        _player = Instantiate(_playerResource, _position, Quaternion.identity) as GameObject;
+        _player.name = playerNum.ToString();
+        _player.transform.SetParent(this.transform);
+        _player.transform.GetComponent<MeshRenderer>().material.color = color;
+    }
+
+    public void SetPlayerControllerReference(GameObject player)
+    {
+        _gamePlayer = player;
     }
 }
