@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1646049096686952744}
   - component: {fileID: 1646049096686952788}
   m_Layer: 0
-  m_Name: Player1
+  m_Name: PlayerBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,7 +57,6 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -69,7 +68,6 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -109,7 +107,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 4
   m_CollisionDetection: 0
 --- !u!114 &1646049096686952788
 MonoBehaviour:
@@ -123,7 +121,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c49e4ba995603b4ebd300a093a52dc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
-  _points: 10
-  _playerNum: 0
-  _color: {r: 1, g: 0, b: 0, a: 1}
