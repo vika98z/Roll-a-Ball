@@ -3,7 +3,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public event Action<PlayerController> OnTrap; 
+    public event Action<PlayerController> OnTrap;
+    public event Action<PlayerController> OnFinish;
+
+    public int Score { get; set; }
 
     private int _playerNum;
     private Rigidbody _rb;
@@ -18,9 +21,13 @@ public class PlayerController : MonoBehaviour
 
     private BallSpawner _ballSpawner;
 
-    public void Init(int nameNum, Color color, int points)
+    //
+    public int sc;
+
+    public void Init(int nameNum, Color color, int score)
     {
-        transform.localScale *= points / 10f;
+        Score = score;
+        transform.localScale *= score / 10f;
         name = nameNum.ToString();
         GetComponent<MeshRenderer>().material.color = color;
     }
@@ -47,7 +54,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         ReadInput();
-
+        //
+        sc = Score;
         void ReadInput()
         {
             _moveHorizontal = _input.HorizontalMove;
@@ -70,15 +78,8 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag.Equals("hole"))
-        {
-           // _ballSpawner.SpawnOnePlayer(_playerNum, GetComponent<MeshRenderer>().material.color);
-           // _ballSpawner._pointsAllPlayers[_playerNum] -= 1;
             OnTrap?.Invoke(this);
-        }
         else if (other.tag.Equals("finish"))
-        {
-            //_ballSpawner._pointsAllPlayers[_playerNum] += 5;
-            Destroy(this.gameObject);
-        }
+            OnFinish?.Invoke(this);
     }
 }
