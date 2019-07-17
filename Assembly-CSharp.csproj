@@ -65,6 +65,7 @@
     <Compile Include="Assets\MazeGenerator\Scripts\RecursiveTreeMazeGenerator.cs" />
     <Compile Include="Assets\MazeGenerator\Scripts\RollerBall.cs" />
     <Compile Include="Assets\MazeGenerator\Scripts\TreeMazeGenerator.cs" />
+    <Compile Include="Assets\Scripts\BallSpawner.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
     <Compile Include="Assets\Scripts\IInput.cs" />
     <Compile Include="Assets\Scripts\KeyboardInput.cs" />

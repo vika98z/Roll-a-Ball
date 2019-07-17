@@ -3,34 +3,27 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private float _points;
+    [HideInInspector] public GameObject Instance;
 
-    [SerializeField]
     private int _playerNum;
-
     private Rigidbody _rb;
+
     private float _moveHorizontal;
     private float _moveVertical;
     private Vector3 _movement;
+
     private IInput _input;
 
     private Vector3 _thisPlayerPosition;
 
-    private GameController _gameController;
-
-    private void Awake()
-    {     
-        _rb = GetComponent<Rigidbody>();
-
-        _thisPlayerPosition = transform.position;
-    }
+    private BallSpawner _ballSpawner;
 
     private void Start()
     {
+        _ballSpawner = GetComponentInParent<BallSpawner>();
+        _rb = GetComponent<Rigidbody>();
+        _thisPlayerPosition = transform.position;
         SetInputVariable();
-        //SetPlayerControllerReferenceFromPlayer();
-        _gameController = GetComponentInParent<GameController>();
     }
 
     private void SetInputVariable()
@@ -40,14 +33,7 @@ public class PlayerController : MonoBehaviour
         //_input = new SumKeyboardInput();
     }
 
-    private int CountOfPlayers()
-    {
-        var gameController = GetComponentInParent<GameController>();
-        return gameController.transform.childCount;
-    }
-
-    //передача ссылки на игрока в скрипт gameController.cs
-    //void SetPlayerControllerReferenceFromPlayer() => _gameController.SetPlayerControllerReference(gameObject);
+    private int CountOfPlayers() => _ballSpawner.transform.childCount;  
 
     private void Update() => ReadInput();
 
@@ -70,8 +56,14 @@ public class PlayerController : MonoBehaviour
     {
         if (other.tag.Equals("hole"))
         {
-            _gameController.Spawn(_playerNum, GetComponent<MeshRenderer>().material.color);
+            _ballSpawner.Spawn(_playerNum, GetComponent<MeshRenderer>().material.color);
+            _ballSpawner._pointsAllPlayers[_playerNum] -= 1;
             Destroy(this.gameObject);
+        }
+        else if (other.tag.Equals("finish"))
+        {
+            this.gameObject.SetActive(false);
+            _ballSpawner._pointsAllPlayers[_playerNum] += 5;
         }
     }
 }

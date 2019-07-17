@@ -1,42 +1,51 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public int CountOfPlayers;
+    public GameObject StartPanel;
 
-    private GameObject _gamePlayer;
-    private GameObject _playerResource;
-    private GameObject _player;
+    private GameObject[] _players;
+    private int _countOfPlayers;
 
-    private Vector3 _position;
-    private Vector3[] corners = { new Vector3(-34, 1, -15), new Vector3(-34, 1, 15), new Vector3(34, 1, -15), new Vector3(34, 1, 15) };
-
-    private void Awake()
+    void Start()
     {
-        for (int i = 0; i < CountOfPlayers; i++)
+        //StartCoroutine(GameLoop());
+    }
+
+    private IEnumerator GameLoop()
+    {
+        yield return StartCoroutine(RoundPlaying());
+    }
+
+    private IEnumerator RoundPlaying()
+    {
+        while (CountOfActivePlayers() != 0)
         {
-            var _color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-            Spawn(i, _color);
+
+            yield return null;
         }
+        StartPanel.SetActive(true);
     }
 
-    private void SetPosition(int i)
+    int CountOfActivePlayers()
     {
-        _position = corners[i];
+        int res = 0;
+        foreach (var player in _players)
+        {
+            if (player.activeInHierarchy)
+                res++;
+        }
+        return res;
     }
 
-    public void Spawn(int playerNum, Color color)
+    public void SetPlayersReference(GameObject[] players)
     {
-        _playerResource = Resources.Load<GameObject>("Player") as GameObject;
-        SetPosition(playerNum);
-        _player = Instantiate(_playerResource, _position, Quaternion.identity) as GameObject;
-        _player.name = playerNum.ToString();
-        _player.transform.SetParent(this.transform);
-        _player.transform.GetComponent<MeshRenderer>().material.color = color;
+        _players = new GameObject[_countOfPlayers];
+        _players = players;
     }
 
-    public void SetPlayerControllerReference(GameObject player)
-    {
-        _gamePlayer = player;
-    }
+    public void SetCountOfPlayers(int count) => _countOfPlayers = count;
 }
