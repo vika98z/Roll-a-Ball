@@ -5,6 +5,8 @@ public class PlayerController : MonoBehaviour
 {
     [HideInInspector] public GameObject Instance;
 
+    public static int Count { get; private set; }
+
     private int _playerNum;
     private Rigidbody _rb;
 
@@ -17,6 +19,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 _thisPlayerPosition;
 
     private BallSpawner _ballSpawner;
+
+    private void Awake() => Count++;
+    private void OnDestroy() => Count--;
 
     private void Start()
     {
@@ -62,8 +67,8 @@ public class PlayerController : MonoBehaviour
         }
         else if (other.tag.Equals("finish"))
         {
-            this.gameObject.SetActive(false);
             _ballSpawner._pointsAllPlayers[_playerNum] += 5;
+            Destroy(this.gameObject);
         }
     }
 }

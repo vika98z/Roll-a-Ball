@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BallSpawner : MonoBehaviour
@@ -21,11 +20,12 @@ public class BallSpawner : MonoBehaviour
                                   new Vector3(34, 1, -15),  new Vector3(34, 1, 15) };
     private GameController _gameController;
 
-    private void Awake()
+    public void SpawnAllPlayers()
     {
         _players = new GameObject[_countOfPlayers];
         _gameController = GetComponentInParent<GameController>();
         _pointsAllPlayers = new List<int>(_countOfPlayers);
+
         for (int i = 0; i < _countOfPlayers; i++)
         {
             var _color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
@@ -33,11 +33,11 @@ public class BallSpawner : MonoBehaviour
             _pointsAllPlayers.Add(10); //пока на старте по 10 очков
         }
 
-        GetCountOfPlayers(_countOfPlayers);
-        GetPlayersReference(_players);
+        //GetCountOfPlayers(_countOfPlayers);
+        //GetPlayersReference(_players);
 
-        void GetPlayersReference(GameObject[] players) => _gameController.SetPlayersReference(players);
-        void GetCountOfPlayers(int count) => _gameController.SetCountOfPlayers(count);
+        //void GetPlayersReference(GameObject[] players) => _gameController.SetPlayersReference(players);
+        //void GetCountOfPlayers(int count) => _gameController.SetCountOfPlayers(count);
     }
 
     private void SetPosition(int i) => _position = corners[i];

@@ -1,51 +1,76 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(BallSpawner))]
 public class GameController : MonoBehaviour
 {
-    public GameObject StartPanel;
+    [SerializeField]
+    private GameObject _startPanel;
+
+    [SerializeField]
+    private Button _startBtn;
+
+    [SerializeField]
+    private int _currentCountOfPlayers;
 
     private GameObject[] _players;
-    private int _countOfPlayers;
+    private BallSpawner _ballSpawner;
+    private PlayerController _playerController;
 
-    void Start()
+    private void Awake()
     {
-        //StartCoroutine(GameLoop());
+        _ballSpawner = GetComponent<BallSpawner>();
+
+        _startBtn.onClick.AddListener(StartGame);
+    }
+
+    private void Update()
+    {
+        _currentCountOfPlayers = PlayerController.Count;
+    }
+
+    private void StartGame()
+    {
+        _startPanel.SetActive(false);
+        StartCoroutine(GameLoop());     
     }
 
     private IEnumerator GameLoop()
     {
+        yield return StartCoroutine(RoundStarting());
+
         yield return StartCoroutine(RoundPlaying());
+
+        yield return StartCoroutine(RoundEnding());
+    }
+
+    private IEnumerator RoundStarting()
+    {
+        _ballSpawner.SpawnAllPlayers();
+        yield return null;
     }
 
     private IEnumerator RoundPlaying()
     {
-        while (CountOfActivePlayers() != 0)
+        while (PlayerController.Count != 0)
         {
 
             yield return null;
-        }
-        StartPanel.SetActive(true);
+        }       
     }
 
-    int CountOfActivePlayers()
+    private IEnumerator RoundEnding()
     {
-        int res = 0;
-        foreach (var player in _players)
-        {
-            if (player.activeInHierarchy)
-                res++;
-        }
-        return res;
+        yield return null;
+        _startPanel.SetActive(true);
     }
 
-    public void SetPlayersReference(GameObject[] players)
-    {
-        _players = new GameObject[_countOfPlayers];
-        _players = players;
-    }
+    //public void SetPlayersReference(GameObject[] players)
+    //{
+    //    _players = new GameObject[_currentCountOfPlayers];
+    //    _players = players;
+    //}
 
-    public void SetCountOfPlayers(int count) => _countOfPlayers = count;
+    //public void SetCountOfPlayers(int count) => _countOfPlayers = count;
 }
