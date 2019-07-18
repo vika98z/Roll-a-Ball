@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(BallSpawner))]
@@ -28,14 +29,24 @@ public class GameController : MonoBehaviour
     private Button _startBtn;
 
     [SerializeField]
-    private Text msgText;
+    private Text _msgText;
+
+    [SerializeField]
+    private GameObject _resultsPanel;
+
+    [SerializeField]
+    private Text _timerText;
 
     private List<PlayerController> _players;
     private BallSpawner _ballSpawner;
+
     private int _roundNumber;
+
+    private float _startTime;
 
     private void Awake()
     {
+        _timerText.gameObject.SetActive(false);
         _ballSpawner = GetComponent<BallSpawner>();
         _startBtn.onClick.AddListener(StartGame);
         _roundNumber = 0;
@@ -52,9 +63,10 @@ public class GameController : MonoBehaviour
             var scoreOnStart = START_POINTS + UnityEngine.Random.Range(0, _playersColors.Count) * 5; 
 
             player.Init(i,  color, scoreOnStart);
-            player.OnTrap += HandlePlayerOnTrap;
 
+            player.OnTrap += HandlePlayerOnTrap;
             player.OnFinish += PlayerOnFinish;
+            player.OnCoin += BonusScore;
 
             _players.Add(player);
             _playersColors.Remove(color);
@@ -72,6 +84,8 @@ public class GameController : MonoBehaviour
         player.gameObject.SetActive(false);
         player.Score += 5;
     }
+
+    private void BonusScore(PlayerController player) => player.Score += 2;
 
     private void StartGame()
     {
@@ -100,7 +114,7 @@ public class GameController : MonoBehaviour
 
         _players.ForEach(player => player.enabled = false);
 
-        msgText.text = "ROUND " + _roundNumber.ToString();
+        _msgText.text = "ROUND " + _roundNumber.ToString();
         yield return new WaitForSeconds(1);
 
         yield return StartCoroutine(Countdown(3));
@@ -111,34 +125,60 @@ public class GameController : MonoBehaviour
         int counter = seconds;
         while (counter > 0)
         {
-            msgText.text = counter.ToString();
+            _msgText.text = counter.ToString();
             yield return new WaitForSeconds(1);
             counter--;
         }
-        msgText.text = "GO!";
+        _msgText.text = "GO!";
         yield return new WaitForSeconds(1);
     }
 
     private IEnumerator RoundPlaying()
     {
-        msgText.text = string.Empty;
+        _startTime = Time.time;
+        _timerText.gameObject.SetActive(true);
+        _msgText.text = string.Empty;
         _players.ForEach(player => player.enabled = true);
+        _players.ForEach(player => player.GetComponent<Rigidbody>().isKinematic = false);
 
         while (!isAllPlayersNotActive())
         {
             yield return null;
         }
 
-        Debug.Log("EXIT");
-
         bool isAllPlayersNotActive() => _players.TrueForAll(player => !player.gameObject.activeSelf);
     }
 
     private IEnumerator RoundEnding()
     {
-        /// _players[i].enabled = false;
-        //if rounds ...
-        yield return StartCoroutine(GameLoop());
-        //_startPanel.SetActive(true);
+        _timerText.gameObject.SetActive(false);
+
+        _players.ForEach(player => player.GetComponent<Rigidbody>().isKinematic = true);
+        if (_roundNumber < roundsCount)
+            yield return StartCoroutine(GameLoop());
+        else
+            yield return StartCoroutine(ResultsTable());
+    }
+
+    private IEnumerator ResultsTable()
+    {
+        _resultsPanel.SetActive(true);
+        yield return new WaitForSeconds(3);
+        _resultsPanel.SetActive(false);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void Update()
+    {
+        ChangeTime();
+
+        void ChangeTime()
+        {
+            float time = Time.time - _startTime;
+            int seconds = (int)(time % 60);
+            int minutes = (int)(time / 60);
+
+            _timerText.text = String.Format("{0:00}:{1:00}", minutes, seconds);
+        }
     }
 }

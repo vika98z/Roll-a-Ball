@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     public event Action<PlayerController> OnTrap;
     public event Action<PlayerController> OnFinish;
+    public event Action<PlayerController> OnCoin;
 
     public int Score { get; set; }
 
@@ -81,5 +82,10 @@ public class PlayerController : MonoBehaviour
             OnTrap?.Invoke(this);
         else if (other.tag.Equals("finish"))
             OnFinish?.Invoke(this);
+        else if (other.tag.Equals("Coin"))
+        {
+            other.gameObject.SetActive(false);
+            OnCoin?.Invoke(this);
+        }
     }
 }
