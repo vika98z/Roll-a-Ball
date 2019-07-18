@@ -22,7 +22,12 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private List<Color> _playersColors;
 
-    [Space, Header("UI"), SerializeField]
+    [Space]
+    [SerializeField]
+    private Scores _scores;
+
+    [Space, Header("UI")] 
+    [SerializeField]
     private GameObject _startPanel;
 
     [SerializeField]
@@ -43,26 +48,38 @@ public class GameController : MonoBehaviour
     private int _roundNumber;
 
     private float _startTime;
+    private float _time;
 
     private void Awake()
     {
         _timerText.gameObject.SetActive(false);
+
         _ballSpawner = GetComponent<BallSpawner>();
+
         _startBtn.onClick.AddListener(StartGame);
+
         _roundNumber = 0;
     }
 
-    private void Init()
+    private void StartGame()
+    {
+        _startPanel.SetActive(false);
+        CreateBalls( new List<IInput> {new KeyboardInput(0), new KeyboardInput(1) });
+
+        StartCoroutine(GameLoop());
+    }
+
+    private void CreateBalls(List<IInput> inputs)
     {
         _players = new List<PlayerController>();
 
-        for (int i = 0; i < _playersCount; i++)
+        for (int i = 0; i < inputs.Count; i++)
         {
             var player = Instantiate(_playerPrefab, transform);
             var color = _playersColors[UnityEngine.Random.Range(0, _playersColors.Count)];
-            var scoreOnStart = START_POINTS + UnityEngine.Random.Range(0, _playersColors.Count) * 5; 
+            var scoreOnStart = START_POINTS + UnityEngine.Random.Range(0, _playersColors.Count) * 5;
 
-            player.Init(i,  color, scoreOnStart);
+            player.Init(i, color, scoreOnStart, inputs[i]);
 
             player.OnTrap += HandlePlayerOnTrap;
             player.OnFinish += PlayerOnFinish;
@@ -76,24 +93,19 @@ public class GameController : MonoBehaviour
     private void HandlePlayerOnTrap(PlayerController player)
     {
         _ballSpawner.SpawnPlayer(player);
-        player.Score -= 1;
+        player.Score -= _scores.Trap;
     }
 
     private void PlayerOnFinish(PlayerController player)
     {
         player.gameObject.SetActive(false);
-        player.Score += 5;
+        player.Score += _scores.Finish;
+        player.TimeInSec += Math.Round(_time, 1);
     }
 
-    private void BonusScore(PlayerController player) => player.Score += 2;
+    private void BonusScore(PlayerController player) => player.Score += _scores.Coin;
 
-    private void StartGame()
-    {
-        _startPanel.SetActive(false);
-        Init();
-
-        StartCoroutine(GameLoop());
-    }
+  
 
     private IEnumerator GameLoop()
     {
@@ -135,11 +147,12 @@ public class GameController : MonoBehaviour
 
     private IEnumerator RoundPlaying()
     {
-        _startTime = Time.time;
-        _timerText.gameObject.SetActive(true);
         _msgText.text = string.Empty;
         _players.ForEach(player => player.enabled = true);
         _players.ForEach(player => player.GetComponent<Rigidbody>().isKinematic = false);
+
+        _startTime = Time.time;
+        _timerText.gameObject.SetActive(true);
 
         while (!isAllPlayersNotActive())
         {
@@ -154,6 +167,8 @@ public class GameController : MonoBehaviour
         _timerText.gameObject.SetActive(false);
 
         _players.ForEach(player => player.GetComponent<Rigidbody>().isKinematic = true);
+        //_players.ForEach(player => player.TimeInSec += );
+
         if (_roundNumber < roundsCount)
             yield return StartCoroutine(GameLoop());
         else
@@ -174,9 +189,9 @@ public class GameController : MonoBehaviour
 
         void ChangeTime()
         {
-            float time = Time.time - _startTime;
-            int seconds = (int)(time % 60);
-            int minutes = (int)(time / 60);
+            _time = Time.time - _startTime;
+            int seconds = (int)(_time % 60);
+            int minutes = (int)(_time / 60);
 
             _timerText.text = String.Format("{0:00}:{1:00}", minutes, seconds);
         }
