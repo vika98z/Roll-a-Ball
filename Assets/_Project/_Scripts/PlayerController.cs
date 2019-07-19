@@ -19,11 +19,10 @@ public class PlayerController : MonoBehaviour
 
     private IInput _input;
 
-    public void Init(int nameNum, Color color, int score, IInput input)
+    public void Init(Color color, int score, IInput input)
     {
         Score = score;
         transform.localScale *= score / 10f;
-        name = nameNum.ToString();
         GetComponent<MeshRenderer>().material.color = color;
 
         _input = input;
