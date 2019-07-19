@@ -55,23 +55,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\MazeGenerator\Scripts\BasicMazeGenerator.cs" />
-     <Compile Include="Assets\MazeGenerator\Scripts\DivisionMazeGenerator.cs" />
-     <Compile Include="Assets\MazeGenerator\Scripts\MazeCell.cs" />
-     <Compile Include="Assets\MazeGenerator\Scripts\MazeSpawner.cs" />
-     <Compile Include="Assets\MazeGenerator\Scripts\OldestTreeMazeGenerator.cs" />
-     <Compile Include="Assets\MazeGenerator\Scripts\RandomTreeMazeGenerator.cs" />
-     <Compile Include="Assets\MazeGenerator\Scripts\RecursiveMazeGenerator.cs" />
-     <Compile Include="Assets\MazeGenerator\Scripts\RecursiveTreeMazeGenerator.cs" />
-     <Compile Include="Assets\MazeGenerator\Scripts\RollerBall.cs" />
-     <Compile Include="Assets\MazeGenerator\Scripts\TreeMazeGenerator.cs" />
-     <Compile Include="Assets\Scripts\BallSpawner.cs" />
-     <Compile Include="Assets\Scripts\GameController.cs" />
-     <Compile Include="Assets\Scripts\IInput.cs" />
-     <Compile Include="Assets\Scripts\KeyboardInput.cs" />
-     <Compile Include="Assets\Scripts\PlayerController.cs" />
-     <Compile Include="Assets\Scripts\Rotator.cs" />
-     <Compile Include="Assets\Scripts\SumKeyboardInput.cs" />
+     <Compile Include="Assets\_Project\_Scripts\BallSpawner.cs" />
+     <Compile Include="Assets\_Project\_Scripts\Data\Scores.cs" />
+     <Compile Include="Assets\_Project\_Scripts\GameController.cs" />
+     <Compile Include="Assets\_Project\_Scripts\GameUI.cs" />
+     <Compile Include="Assets\_Project\_Scripts\Input\IInput.cs" />
+     <Compile Include="Assets\_Project\_Scripts\Input\KeyboardInput.cs" />
+     <Compile Include="Assets\_Project\_Scripts\Input\SumKeyboardInput.cs" />
+     <Compile Include="Assets\_Project\_Scripts\PlayerController.cs" />
+     <Compile Include="Assets\_Project\MazeGenerator\Scripts\BasicMazeGenerator.cs" />
+     <Compile Include="Assets\_Project\MazeGenerator\Scripts\DivisionMazeGenerator.cs" />
+     <Compile Include="Assets\_Project\MazeGenerator\Scripts\MazeCell.cs" />
+     <Compile Include="Assets\_Project\MazeGenerator\Scripts\MazeSpawner.cs" />
+     <Compile Include="Assets\_Project\MazeGenerator\Scripts\OldestTreeMazeGenerator.cs" />
+     <Compile Include="Assets\_Project\MazeGenerator\Scripts\RandomTreeMazeGenerator.cs" />
+     <Compile Include="Assets\_Project\MazeGenerator\Scripts\RecursiveMazeGenerator.cs" />
+     <Compile Include="Assets\_Project\MazeGenerator\Scripts\RecursiveTreeMazeGenerator.cs" />
+     <Compile Include="Assets\_Project\MazeGenerator\Scripts\RollerBall.cs" />
+     <Compile Include="Assets\_Project\MazeGenerator\Scripts\TreeMazeGenerator.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/User/Desktop/Unity Projects/Roll-a-Ball/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
